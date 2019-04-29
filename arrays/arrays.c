@@ -39,7 +39,7 @@ void destroy_array(Array *arr)
 {
 
   // Free all elements
-  for (int i = 0; i != NULL; i++)
+  for (int i = 0; i != arr->capacity; i++)
   {
     free(arr->elements[i]);
   }
@@ -63,14 +63,17 @@ void resize_array(Array *arr)
   if (temp)
   {
     int i = 0;
-    while (i <= strlen(arr->elements))
+    while (i <= strlen(arr->elements)) //i don't want to hit the null pointer
     {
-      arr->elements[i] = temp;
+      temp[i] = arr->elements[i];
+      i++;
     }
   }
   // Free the old elements array (but NOT the strings they point to)
-  free(arr);
+  free(arr->elements);
   // Update the elements and capacity to new values
+  arr->elements = temp;
+  // already ... umm... resized arr->capacity
 }
 
 /************************************
