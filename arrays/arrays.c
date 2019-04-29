@@ -91,8 +91,13 @@ char *arr_read(Array *arr, int index)
 {
 
   // Throw an error if the index is greater or equal to than the current count
+  if (index >= arr->count)
+  {
 
+    return -1;
+  }
   // Otherwise, return the element at the given index
+  return arr->elements[index];
 }
 
 /*****
