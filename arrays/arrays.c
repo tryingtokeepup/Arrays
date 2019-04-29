@@ -26,10 +26,10 @@ Array *create_array(int capacity)
 
   // Set initial values for capacity and count
   array->capacity = capacity;
-  array->count = -1;
+  array->count = 0;
 
   // Allocate memory for elements
-  array->elements = malloc(capacity * sizeof(char));
+  array->elements = malloc(capacity * sizeof(char *));
 }
 
 /*****
@@ -39,8 +39,15 @@ void destroy_array(Array *arr)
 {
 
   // Free all elements
-
+  for (int i = 0; i != NULL; i++)
+  {
+    free(arr->elements[i]);
+  }
+  // security freak James Page recommends nulling out all pointers and refs for security
+  // arr->elements = NULL
+  free(arr->elements);
   // Free array
+  free(arr);
 }
 
 /*****
@@ -49,13 +56,20 @@ void destroy_array(Array *arr)
  *****/
 void resize_array(Array *arr)
 {
-
+  arr->capacity *= 2;
   // Create a new element storage with double capacity
-
+  char **temp = malloc(arr->capacity * sizeof(char *));
   // Copy elements into the new storage
-
+  if (temp)
+  {
+    int i = 0;
+    while (i <= strlen(arr->elements))
+    {
+      arr->elements[i] = temp;
+    }
+  }
   // Free the old elements array (but NOT the strings they point to)
-
+  free(arr);
   // Update the elements and capacity to new values
 }
 
