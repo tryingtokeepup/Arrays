@@ -30,6 +30,8 @@ Array *create_array(int capacity)
 
   // Allocate memory for elements
   array->elements = malloc(capacity * sizeof(char *));
+
+  return array;
 }
 
 /*****
@@ -39,10 +41,10 @@ void destroy_array(Array *arr)
 {
 
   // Free all elements
-  for (int i = 0; i != arr->capacity; i++)
-  {
-    free(arr->elements[i]);
-  }
+  // for (int i = 0; i < arr->capacity; i++)
+  // {
+  //   free(arr->elements[i]);
+  // }
   // security freak James Page recommends nulling out all pointers and refs for security
   // arr->elements = NULL
   free(arr->elements);
@@ -63,7 +65,7 @@ void resize_array(Array *arr)
   if (temp)
   {
     int i = 0;
-    while (i <= strlen(arr->elements)) //i don't want to hit the null pointer
+    while (i < arr->capacity) //i don't want to hit the null pointer
     {
       temp[i] = arr->elements[i];
       i++;
@@ -93,8 +95,8 @@ char *arr_read(Array *arr, int index)
   // Throw an error if the index is greater or equal to than the current count
   if (index >= arr->count)
   {
-
-    return -1;
+    //printf("the index is out of range, check it real quick.\n");
+    return NULL;
   }
   // Otherwise, return the element at the given index
   return arr->elements[index];
@@ -107,14 +109,26 @@ void arr_insert(Array *arr, char *element, int index)
 {
 
   // Throw an error if the index is greater than the current count
+  if (index > arr->count)
+  {
 
+    exit(1);
+  }
   // Resize the array if the number of elements is over capacity
-
+  // when would we hit this? the count will always match the capacity.
+  if (arr->capacity <= arr->count)
+  {
+    resize_array(arr);
+  }
   // Move every element after the insert index to the right one position
-
+  for (int i = index; i < arr->count; i++)
+  {
+    arr->elements[i + 1] = arr->elements[i];
+  }
   // Copy the element and add it to the array
-
+  arr->elements[index] = element;
   // Increment count by 1
+  arr->count += 1;
 }
 
 /*****
@@ -125,10 +139,14 @@ void arr_append(Array *arr, char *element)
 
   // Resize the array if the number of elements is over capacity
   // or throw an error if resize isn't implemented yet.
-
+  if (arr->capacity < arr->count)
+  {
+    resize_array(arr);
+  }
   // Copy the element and add it to the end of the array
-
+  arr->elements[arr->count] = element;
   // Increment count by 1
+  arr->count += 1;
 }
 
 /*****
