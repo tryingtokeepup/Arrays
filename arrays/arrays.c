@@ -153,7 +153,7 @@ void arr_append(Array *arr, char *element)
     resize_array(arr);
   }
   // Copy the element and add it to the end of the array
-  arr->elements[arr->count] = strdup(element);
+  arr->elements[arr->count] = element;
   // Increment count by 1
   arr->count += 1;
 }
